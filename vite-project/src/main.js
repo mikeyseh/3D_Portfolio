@@ -69,4 +69,36 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.update();
 
+// event listener for clicks and texture changes
+
+let isDay = true;// checks for day and night
+
+window.addEventListener("click", () => {
+
+  isDay = !isDay;
+
+  scene.traverse(child => { // goes through the whole hierarchy of files
+
+    if (child.isMesh) { // checks for which objects are meshes using the previous texture map
+
+      Object.keys(textureMap).forEach(key => {
+
+        if (child.name.includes(key)) {
+
+          child.material.map = isDay
+            ? loadedTextures.day[key]
+            : loadedTextures.night[key];
+
+          child.material.needsUpdate = true;
+       controls.update();
+        }
+
+      });
+
+    }
+
+  });
+
+});
+
 //Lwazi and pako in the render loop please copy and paste controls.update();  into it and lastly delete this massage after doing so,thank you!
